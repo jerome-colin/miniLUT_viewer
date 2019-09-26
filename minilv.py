@@ -113,9 +113,9 @@ def miniplot(rtoa, tau, minilut, alt, vband, filename, \
 
     fig, ax1 = pl.subplots(1, 1, figsize=(6, 6))
     ax1.set_aspect('equal', 'box')
-    pl.title("rse = f(rtoa), band %i nm, level = %6.1f m" % (vband[band], alt[level]))
-    ax1.set_xlabel('rtoa')
-    ax1.set_ylabel('rse')
+    pl.title("$\\rho_{toa} = f(\\rho_{surf}$), band %i nm, level = %6.1f m" % (vband[band], alt[level]))
+    ax1.set_xlabel("$\\rho_{surf}$")
+    ax1.set_ylabel("$\\rho_{toa}$")
     ax1.set_xlim(min(rtoa), max(rtoa))
     ax1.set_ylim(min(rtoa), max(rtoa))
     ax1.plot([min(rtoa), max(rtoa)], [min(rtoa), max(rtoa)], 'k--')
@@ -132,12 +132,13 @@ def miniplot(rtoa, tau, minilut, alt, vband, filename, \
 
     # Loop on AOT, plot and check monotony of rse=f(rtoa)
     for t in tau_sampling:
-        ax1.plot(rtoa, minilut[band,:,t,level], label = "AOT=%4.2f" % tau[t])
+        ax1.plot(minilut[band,:,t,level], rtoa, label = "AOT=%4.2f" % tau[t])
         # Testing monotony for each AOT step:
         monotony = np.all(np.diff(minilut[band,:,t,level])>0)
         if not monotony:
             print("WARNING: non-monotone fitting for AOT=%4.2f" % tau[t])
 
+    ax1.grid(linestyle='--')
     ax1.legend()
 
     try:
